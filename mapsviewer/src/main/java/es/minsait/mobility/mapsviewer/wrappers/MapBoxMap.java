@@ -214,7 +214,7 @@ public class MapBoxMap implements BaseMapView, MapboxMap.OnMapClickListener,OnMa
 
                 this.clearSelection();
                 final CameraPosition cameraPosition = new CameraPosition.Builder()
-                        .zoom(map.getCameraPosition().zoom)
+                        .zoom(16)
                         .target(marker.getPosition()).build();
                 ((Marker)point.getMarker()).setIcon(getIcon(point.getImageSelected()));
 

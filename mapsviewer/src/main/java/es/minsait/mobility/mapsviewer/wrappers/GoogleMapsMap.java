@@ -252,7 +252,7 @@ public class GoogleMapsMap implements BaseMapView, OnMapReadyCallback,GoogleMap.
 
                 this.clearSelection();
                 final CameraPosition cameraPosition = new CameraPosition.Builder()
-                        .zoom(map.getCameraPosition().zoom)
+                        .zoom(16)
                         .target(marker.getPosition()).build();
                 marker.setIcon(getIcon(point.getImageSelected()));
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
