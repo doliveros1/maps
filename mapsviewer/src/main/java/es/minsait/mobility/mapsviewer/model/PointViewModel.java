@@ -15,6 +15,7 @@ public class PointViewModel<M>{
     private String title;
     protected int imageDrawable = 0;
     protected int imageDrawableSelected = 0;
+    private boolean isSelected;
 
     protected M marker;
 
@@ -86,5 +87,13 @@ public class PointViewModel<M>{
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }

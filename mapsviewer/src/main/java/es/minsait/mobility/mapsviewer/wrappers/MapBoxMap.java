@@ -82,8 +82,19 @@ public class MapBoxMap implements BaseMapView, MapboxMap.OnMapClickListener,OnMa
         for (PointViewModel location : pois) {
             add(location);
         }
-        map.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 20));
-   }
+        CameraUpdate cameraUpdate;
+        if(pois.size()>1){
+            cameraUpdate = CameraUpdateFactory.newLatLngBounds(builder.build(), 20);
+        } else{
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .zoom(16)
+                    .target(new LatLng(pois.get(0).getLatitude(),pois.get(0).getLongitude())).build();
+            cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+
+        }
+        map.animateCamera(cameraUpdate);
+
+    }
 
     @Override
     public void remove(List<PointViewModel> locations) {
@@ -112,7 +123,12 @@ public class MapBoxMap implements BaseMapView, MapboxMap.OnMapClickListener,OnMa
 
     @Override
     public void update(PointViewModel point) {
-        ((Marker)point.getMarker()).setIcon(getIcon(point.getImage()));
+
+        if(point.isSelected()){
+            ((Marker)point.getMarker()).setIcon(getIcon(point.getImageSelected()));
+        } else{
+            ((Marker)point.getMarker()).setIcon(getIcon(point.getImage()));
+        }
 
         for(PointViewModel pointViewModel : this.pois){
             if(pointViewModel.getMarker() == (point.getMarker())){
@@ -221,6 +237,7 @@ public class MapBoxMap implements BaseMapView, MapboxMap.OnMapClickListener,OnMa
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
                 map.animateCamera(cameraUpdate);
                 mapEvents.onPoiSelected(point);
+                break;
             }
         }
         return false;
@@ -229,12 +246,17 @@ public class MapBoxMap implements BaseMapView, MapboxMap.OnMapClickListener,OnMa
     @Override
     public void setMapBounds(int paddingBounds) {
 
-        LatLngBounds bounds = builder.build();
-        Resources res = context.getResources();
-        float padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, paddingBounds, res.getDisplayMetrics());
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, (int) padding);
-        map.moveCamera(cu);
-        map.animateCamera(cu);
+        try{
+            LatLngBounds bounds = builder.build();
+            Resources res = context.getResources();
+            float padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, paddingBounds, res.getDisplayMetrics());
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, (int) padding);
+            map.moveCamera(cu);
+            map.animateCamera(cu);
+        } catch (Exception e){
+
+        }
+
     }
 
     @Override
